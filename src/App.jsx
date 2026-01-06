@@ -8,6 +8,7 @@ import AuthGuard from "./components/auth/AuthGuard";
 
 import TarotPage from "./components/features/TarotPage";
 import BirthChartPage from "./components/features/BirthChartPage";
+<Route path="/birth-chart" element={<BirthChartPage />} />
 import HoroscopePage from "./components/features/HoroscopePage";
 import PractitionersDirectory from "./components/practitioners/PractitionersDirectory";
 
