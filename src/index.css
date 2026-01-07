@@ -1,1 +1,14 @@
 @import "tailwindcss";
+button,
+a {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+button:active,
+a:active {
+  transform: scale(0.97);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

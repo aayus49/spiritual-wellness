@@ -47,15 +47,12 @@ export default function PractitionersDirectory() {
                   <span key={sp} className="text-xs px-2 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-100">{sp}</span>
                 ))}
               </div>
-              <div className="mt-4 text-gray-900 font-medium">£{p.priceGBP} / session</div>
+              <div className="mt-4 text-gray-900 font-medium">Aś{p.priceGBP} / session</div>
 
-              <div className="mt-5 flex gap-3">
+              <div className="mt-5">
                 <button onClick={() => setActive(p)} className="flex-1 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-purple-400 text-white font-semibold">
                   Book
                 </button>
-                <Link to="/dashboard" className="px-4 py-2 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50">
-                  Dashboard
-                </Link>
               </div>
             </div>
           ))}

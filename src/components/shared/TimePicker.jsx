@@ -25,18 +25,42 @@ export default function TimePicker({ value, onChange }) {
         <div className="rounded-xl border border-gray-200 p-3">
           <div className="text-xs text-gray-500">Hour</div>
           <div className="mt-2 flex items-center justify-between">
-            <button type="button" onClick={() => setHour(h - 1)} className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50">-</button>
+            <button
+              type="button"
+              onClick={() => setHour(h - 1)}
+              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+            >
+              -
+            </button>
             <div className="text-xl font-bold">{pad(h)}</div>
-            <button type="button" onClick={() => setHour(h + 1)} className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50">+</button>
+            <button
+              type="button"
+              onClick={() => setHour(h + 1)}
+              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+            >
+              +
+            </button>
           </div>
         </div>
 
         <div className="rounded-xl border border-gray-200 p-3">
           <div className="text-xs text-gray-500">Minutes</div>
           <div className="mt-2 flex items-center justify-between">
-            <button type="button" onClick={() => setMin(m - 5)} className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50">-</button>
+            <button
+              type="button"
+              onClick={() => setMin(m - 5)}
+              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+            >
+              -
+            </button>
             <div className="text-xl font-bold">{pad(m)}</div>
-            <button type="button" onClick={() => setMin(m + 5)} className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50">+</button>
+            <button
+              type="button"
+              onClick={() => setMin(m + 5)}
+              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+            >
+              +
+            </button>
           </div>
         </div>
       </div>
