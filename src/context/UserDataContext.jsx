@@ -74,7 +74,20 @@ export function UserDataProvider({ children }) {
     setReadings(prev => prev.filter(r => r.id !== id));
   }
 
-  function createAppointment({ practitionerId, practitionerName, serviceId, serviceTitle, serviceType, durationMin, dateISO, timeLabel, priceGBP }) {
+  function createAppointment({
+    practitionerId,
+    practitionerName,
+    practitionerEmail,
+    serviceId,
+    serviceTitle,
+    serviceType,
+    durationMin,
+    dateISO,
+    timeLabel,
+    priceGBP,
+    sessionType,
+    note,
+  }) {
     if (!user?.id || user.id === "guest") throw new Error("Login required to book.");
 
     const now = new Date();
@@ -84,6 +97,7 @@ export function UserDataProvider({ children }) {
       clientName: user.name,
       practitionerId,
       practitionerName,
+      practitionerEmail,
       serviceId,
       serviceTitle,
       serviceType,
@@ -91,6 +105,8 @@ export function UserDataProvider({ children }) {
       dateISO,
       timeLabel,
       priceGBP,
+      sessionType,
+      note,
       status: "pending",
       createdAt: now.toISOString(),
     };
