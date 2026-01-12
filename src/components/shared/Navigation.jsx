@@ -11,7 +11,8 @@ const navClass = ({ isActive }) =>
 
 export default function Navigation() {
   const { user, logout } = useAuth();
-  const isPractitioner = user?.role === "practitioner";
+  const safeUser = user || { role: "guest", name: "Guest" };
+  const isPractitioner = safeUser.role === "practitioner";
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200">
@@ -37,10 +38,10 @@ export default function Navigation() {
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-2 text-gray-700">
             <User className="w-4 h-4" />
-            <span className="text-sm">{user.role === "guest" ? "Guest" : user.name}</span>
+            <span className="text-sm">{safeUser.role === "guest" ? "Guest" : safeUser.name}</span>
           </div>
 
-          {user.role !== "guest" ? (
+          {safeUser.role !== "guest" ? (
             <button
               onClick={logout}
               className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition active:scale-[0.99]"

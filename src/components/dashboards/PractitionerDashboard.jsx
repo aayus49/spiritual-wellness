@@ -62,7 +62,7 @@ export default function PractitionerDashboard() {
               disabled={saving}
               className="px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-400 text-white font-semibold hover:opacity-95 transition disabled:opacity-60"
             >
-              {saving ? "Saving…" : "Save Services"}
+              {saving ? "Saving..." : "Save Services"}
             </button>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function PractitionerDashboard() {
                       </div>
 
                       <div>
-                        <div className="text-xs text-gray-500">Rate (Aœ)</div>
+                        <div className="text-xs text-gray-500">Rate (GBP)</div>
                         <input
                           type="number"
                           value={s.priceGBP}
@@ -142,9 +142,9 @@ export default function PractitionerDashboard() {
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <div className="font-semibold text-gray-900">{a.clientName}</div>
-                        <div className="text-sm text-gray-600">{a.serviceTitle} ƒ?› {a.durationMin} min</div>
+                        <div className="text-sm text-gray-600">{a.serviceTitle} - {a.durationMin} min</div>
                         <div className="text-sm text-gray-500 mt-1">
-                          {new Date(a.dateISO).toDateString()} ƒ?› {a.timeLabel} ƒ?› Aœ{a.priceGBP}
+                          {new Date(a.dateISO).toDateString()} - {a.timeLabel} - GBP {a.priceGBP}
                         </div>
                         <div className="mt-2 text-xs inline-flex px-2 py-1 rounded-full bg-gray-100">{a.status}</div>
                       </div>

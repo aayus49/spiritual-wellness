@@ -1,16 +1,26 @@
 // AdminDashboard.jsx
-import React, { useMemo, useState } from "react";
-import { LS_KEYS, lsGet, lsSet } from "../../lib/localStorage";
+import React, { useState } from "react";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import { useAuth } from "../../context/AuthContext";
+import { useUserData } from "../../context/UserDataContext";
 
 export default function AdminDashboard() {
-  const [tick, setTick] = useState(0);
+  const { user } = useAuth();
+  const { practitioners, refreshUserData } = useUserData();
+  const [savingId, setSavingId] = useState(null);
 
-  const practitioners = useMemo(() => lsGet(LS_KEYS.PRACTITIONERS, []), [tick]);
-
-  const setVerified = (userId, verified) => {
-    const next = practitioners.map(p => p.userId === userId ? { ...p, verified } : p);
-    lsSet(LS_KEYS.PRACTITIONERS, next);
-    setTick(t => t + 1);
+  const setVerified = async (userId, verified) => {
+    setSavingId(userId);
+    try {
+      await updateDoc(doc(db, "profiles", userId), {
+        verified,
+        practitioner_status: verified ? "approved" : "pending",
+      });
+      await refreshUserData(user?.id);
+    } finally {
+      setSavingId(null);
+    }
   };
 
   return (
@@ -29,9 +39,21 @@ export default function AdminDashboard() {
               </div>
               <div className="flex gap-2">
                 {p.verified ? (
-                  <button onClick={() => setVerified(p.userId, false)} className="px-3 py-2 rounded-lg bg-red-600 text-white text-sm">Revoke</button>
+                  <button
+                    onClick={() => setVerified(p.userId, false)}
+                    disabled={savingId === p.userId}
+                    className="px-3 py-2 rounded-lg bg-red-600 text-white text-sm disabled:opacity-60"
+                  >
+                    Revoke
+                  </button>
                 ) : (
-                  <button onClick={() => setVerified(p.userId, true)} className="px-3 py-2 rounded-lg bg-green-600 text-white text-sm">Approve</button>
+                  <button
+                    onClick={() => setVerified(p.userId, true)}
+                    disabled={savingId === p.userId}
+                    className="px-3 py-2 rounded-lg bg-green-600 text-white text-sm disabled:opacity-60"
+                  >
+                    Approve
+                  </button>
                 )}
               </div>
             </div>

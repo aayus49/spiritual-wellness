@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { LS_KEYS, lsGet } from "../../lib/localStorage";
+import { useUserData } from "../../context/UserDataContext";
 
 export default function FeaturedPractitioners() {
-  const featured = useMemo(() => {
-    const list = lsGet(LS_KEYS.PRACTITIONERS, []);
-    return list.filter(p => p.verified).slice(0, 3);
-  }, []);
+  const { practitioners } = useUserData();
+  const featured = useMemo(
+    () => (practitioners || []).filter((p) => p?.verified).slice(0, 3),
+    [practitioners]
+  );
 
   if (featured.length === 0) return null;
 

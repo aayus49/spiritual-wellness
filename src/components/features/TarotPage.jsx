@@ -48,7 +48,7 @@ function buildBetterDescription(cards) {
 function CardBack({ index, shuffling }) {
   return (
     <motion.div
-      className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-xl aspect-[16/9]"
+      className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-xl aspect-[3/4]"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, duration: 0.35 }}

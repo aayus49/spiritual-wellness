@@ -35,6 +35,10 @@ export default function BookingModal({ open, onClose, practitioner }) {
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
 
+  const layoutClass = step === 1 ? "p-6 grid gap-6" : "p-6 grid lg:grid-cols-3 gap-6";
+  const leftColClass = step === 1 ? "space-y-6" : "lg:col-span-2 space-y-6";
+  const summaryColClass = step === 1 ? "" : "lg:col-span-1";
+
   const canProceed =
     (step === 0 && !!service) ||
     (step === 1 && !!date && !!time) ||
@@ -54,10 +58,12 @@ export default function BookingModal({ open, onClose, practitioner }) {
     setSaving(true);
     try {
       createAppointment({
-        practitionerId: practitioner.id,
+        practitionerId: practitioner.userId || practitioner.id,
         practitionerName: practitioner.name,
         serviceId: service.id,
         serviceTitle: service.title,
+        serviceType: service.type || "service",
+        durationMin: service.durationMin,
         priceGBP,
         clientId: user.id,
         clientName: user.name,
@@ -103,9 +109,9 @@ export default function BookingModal({ open, onClose, practitioner }) {
           </div>
         </div>
 
-        <div className="p-6 grid lg:grid-cols-3 gap-6">
+        <div className={layoutClass}>
           {/* Left: Steps */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className={leftColClass}>
             {/* STEP 0: service */}
             {step === 0 && (
               <div className="rounded-2xl border border-gray-200 p-5">
@@ -129,7 +135,7 @@ export default function BookingModal({ open, onClose, practitioner }) {
                       <div className="text-sm text-gray-600 mt-1 line-clamp-2">{s.description}</div>
                       <div className="mt-3 flex items-center justify-between text-sm">
                         <span className="text-gray-700">{s.durationMin} min</span>
-                        <span className="font-semibold text-gray-900">£{Number(s.priceGBP).toFixed(0)}</span>
+                        <span className="font-semibold text-gray-900">GBP {Number(s.priceGBP).toFixed(0)}</span>
                       </div>
                       <div className="mt-2 text-xs inline-flex px-2 py-1 rounded-full bg-gray-50 border border-gray-200 text-gray-700">
                         {s.type || "service"}
@@ -142,26 +148,32 @@ export default function BookingModal({ open, onClose, practitioner }) {
 
             {/* STEP 1: date & time */}
             {step === 1 && (
-              <div className="rounded-2xl border border-gray-200 p-5">
+              <div className="rounded-2xl border border-gray-200 p-5 max-h-[520px] overflow-y-auto">
                 <div className="text-lg font-semibold text-gray-900">Pick date & time</div>
                 <div className="text-sm text-gray-600 mt-1">Select a date, then choose a time.</div>
 
-                <div className="mt-4 grid md:grid-cols-2 gap-4">
-                  <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                    <div className="text-sm font-semibold text-gray-900">Date</div>
-                    <div className="mt-3">
+                <div className="mt-4 grid gap-4">
+                  <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm w-full">
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">Date</div>
+                      <div className="text-xs text-gray-400">Pick a day</div>
+                    </div>
+                    <div className="mt-2 w-full">
                       <CustomCalendar value={date} onChange={setDate} />
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                    <div className="text-sm font-semibold text-gray-900">Time</div>
-                    <div className="mt-3">
+                  <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm w-full">
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">Time</div>
+                      <div className="text-xs text-gray-400">Select slot</div>
+                    </div>
+                    <div className="mt-2 w-full">
                       <TimePicker value={time} onChange={setTime} />
                     </div>
 
-                    <div className="mt-4">
-                      <div className="text-sm font-semibold text-gray-900">Session type</div>
+                    <div className="mt-3 border-t border-gray-100 pt-3">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">Session type</div>
                       <div className="mt-2 grid grid-cols-3 gap-2">
                         {["video", "phone", "in-person"].map((t) => (
                           <button
@@ -253,7 +265,7 @@ export default function BookingModal({ open, onClose, practitioner }) {
                     </div>
                     <div>
                       <div className="text-gray-500">Price</div>
-                      <div className="font-semibold text-gray-900">£{priceGBP.toFixed(0)}</div>
+                      <div className="font-semibold text-gray-900">GBP {priceGBP.toFixed(0)}</div>
                     </div>
                   </div>
                 </div>
@@ -267,7 +279,7 @@ export default function BookingModal({ open, onClose, practitioner }) {
                     "disabled:opacity-60 disabled:cursor-not-allowed",
                   ].join(" ")}
                 >
-                  {saving ? "Confirming…" : "Confirm Booking"}
+                  {saving ? "Confirming..." : "Confirm Booking"}
                 </button>
               </div>
             )}
@@ -295,7 +307,7 @@ export default function BookingModal({ open, onClose, practitioner }) {
           </div>
 
           {/* Right: Sticky summary */}
-          <div className="lg:col-span-1">
+          <div className={summaryColClass}>
             <div className="sticky top-24 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
               <div className="text-sm font-semibold text-gray-900">Booking Summary</div>
 
@@ -303,7 +315,7 @@ export default function BookingModal({ open, onClose, practitioner }) {
                 <Row label="Practitioner" value={practitioner?.name || "-"} />
                 <Row label="Service" value={service?.title || "-"} />
                 <Row label="Duration" value={service ? `${service.durationMin} min` : "-"} />
-                <Row label="Price" value={service ? `£${priceGBP.toFixed(0)}` : "-"} />
+                <Row label="Price" value={service ? `GBP ${priceGBP.toFixed(0)}` : "-"} />
                 <div className="h-px bg-gray-200 my-3" />
                 <Row label="Date" value={date ? date.toDateString() : "-"} />
                 <Row label="Time" value={time || "-"} />

@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { lsGet, LS_KEYS } from "../../lib/localStorage";
+import { useUserData } from "../../context/UserDataContext";
 import {
   Sparkles,
   Stars,
@@ -119,16 +119,11 @@ function Stat({ label, value }) {
   );
 }
 
-function getRegisteredPractitionersFromLocalStorage() {
-  const list = lsGet(LS_KEYS.PRACTITIONERS, []);
-  return Array.isArray(list) ? list.filter((p) => p?.verified) : [];
-}
-
 export default function HomePage() {
-  const practitioners = useMemo(() => {
-    const list = getRegisteredPractitionersFromLocalStorage();
-    return list.slice(0, 2);
-  }, []);
+  const { practitioners } = useUserData();
+  const featuredPractitioners = useMemo(() => {
+    return (practitioners || []).filter((p) => p?.verified).slice(0, 2);
+  }, [practitioners]);
 
   return (
     <div className="bg-gray-50">
@@ -274,63 +269,6 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* HOW IT WORKS */}
-      <Section className="pt-0">
-        <Container>
-          <div className="grid lg:grid-cols-2 gap-6">
-            <div className="rounded-3xl border border-gray-200 bg-white p-7 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="h-11 w-11 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center">
-                  <Calendar className="h-5 w-5 text-purple-700" />
-                </div>
-                <div>
-                  <div className="text-gray-900 font-semibold">Book in seconds</div>
-                  <div className="text-gray-600 text-sm">Choose a service, pick a time, confirm.</div>
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-3">
-                <Step n="1" title="Explore as guest" desc="Tarot, horoscopes, and birth chart UI are accessible." />
-                <Step n="2" title="Login to save" desc="Readings and bookings appear in your dashboard." />
-                <Step n="3" title="Verified practitioners" desc="Directory is sourced from registered accounts only." />
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-gray-200 bg-white p-7 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="h-11 w-11 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
-                  <LineChart className="h-5 w-5 text-indigo-700" />
-                </div>
-                <div>
-                  <div className="text-gray-900 font-semibold">Built for Supabase later</div>
-                  <div className="text-gray-600 text-sm">Keep the UI. Swap the storage layer.</div>
-                </div>
-              </div>
-
-              <div className="mt-6 text-sm text-gray-600 leading-relaxed">
-                The frontend uses role-based dashboards (client / practitioner / admin) and clean data shapes.
-                When you’re ready, we’ll replace the localStorage methods with Supabase tables + RLS without rewriting UI.
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  to="/register"
-                  className="px-5 py-3 rounded-2xl bg-gray-900 text-white font-semibold hover:bg-gray-800 active:scale-[0.99] transition"
-                >
-                  Create Account
-                </Link>
-                <Link
-                  to="/login"
-                  className="px-5 py-3 rounded-2xl border border-gray-200 bg-white text-gray-900 font-semibold hover:bg-gray-50 active:scale-[0.99] transition"
-                >
-                  Login
-                </Link>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
       {/* PRACTITIONERS PREVIEW */}
       <Section className="pt-0">
         <Container>
@@ -351,12 +289,12 @@ export default function HomePage() {
           </div>
 
           <div className="mt-6 grid md:grid-cols-2 gap-6">
-            {practitioners.length === 0 ? (
+            {featuredPractitioners.length === 0 ? (
               <div className="rounded-3xl border border-gray-200 bg-white p-7 text-gray-600">
                 No practitioners registered yet.
               </div>
             ) : (
-              practitioners.map((p) => (
+              featuredPractitioners.map((p) => (
                 <div key={p.userId} className="rounded-3xl border border-gray-200 bg-white p-7 shadow-sm">
                   <div className="flex items-start justify-between gap-4">
                     <div>

@@ -17,6 +17,18 @@ export default function TimePicker({ value, onChange }) {
     onChange(`${pad(h)}:${pad(mm)}`);
   }
 
+  function handleHourInput(e) {
+    const next = Number(e.target.value);
+    if (Number.isNaN(next)) return;
+    setHour(next);
+  }
+
+  function handleMinuteInput(e) {
+    const next = Number(e.target.value);
+    if (Number.isNaN(next)) return;
+    setMin(next);
+  }
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-4">
       <div className="text-sm font-semibold text-gray-900">Time</div>
@@ -24,19 +36,27 @@ export default function TimePicker({ value, onChange }) {
       <div className="mt-3 grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-gray-200 p-3">
           <div className="text-xs text-gray-500">Hour</div>
-          <div className="mt-2 flex items-center justify-between">
+          <div className="mt-2 flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => setHour(h - 1)}
-              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+              className="h-9 w-9 rounded-lg border border-gray-200 hover:bg-gray-50"
             >
               -
             </button>
-            <div className="text-xl font-bold">{pad(h)}</div>
+            <input
+              type="number"
+              min="0"
+              max="23"
+              value={Number.isNaN(h) ? "" : h}
+              onChange={handleHourInput}
+              className="h-9 w-16 rounded-lg border border-gray-200 px-2 text-center text-lg font-semibold"
+              aria-label="Hour"
+            />
             <button
               type="button"
               onClick={() => setHour(h + 1)}
-              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+              className="h-9 w-9 rounded-lg border border-gray-200 hover:bg-gray-50"
             >
               +
             </button>
@@ -45,19 +65,27 @@ export default function TimePicker({ value, onChange }) {
 
         <div className="rounded-xl border border-gray-200 p-3">
           <div className="text-xs text-gray-500">Minutes</div>
-          <div className="mt-2 flex items-center justify-between">
+          <div className="mt-2 flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => setMin(m - 5)}
-              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+              className="h-9 w-9 rounded-lg border border-gray-200 hover:bg-gray-50"
             >
               -
             </button>
-            <div className="text-xl font-bold">{pad(m)}</div>
+            <input
+              type="number"
+              min="0"
+              max="59"
+              value={Number.isNaN(m) ? "" : m}
+              onChange={handleMinuteInput}
+              className="h-9 w-16 rounded-lg border border-gray-200 px-2 text-center text-lg font-semibold"
+              aria-label="Minutes"
+            />
             <button
               type="button"
               onClick={() => setMin(m + 5)}
-              className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+              className="h-9 w-9 rounded-lg border border-gray-200 hover:bg-gray-50"
             >
               +
             </button>

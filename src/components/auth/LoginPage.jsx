@@ -13,13 +13,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setErr("");
-    const res = login(email, password);
-    if (!res.ok) return setErr(res.message);
-    nav(returnUrl);
-  };
+  const onSubmit = async (e) => {
+  e.preventDefault();
+  setErr("");
+  const res = await login(email, password);
+  if (!res.ok) return setErr(res.message);
+  nav(returnUrl);
+};
+
 
   return (
     <div className="min-h-[80vh] grid place-items-center px-6 bg-gray-50">
